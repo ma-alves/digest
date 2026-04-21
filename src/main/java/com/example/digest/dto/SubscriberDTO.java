@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record SubscriberDTO(
 
-    @NotBlank(message = "Formato do e-mail inválido.")
+    @NotBlank
     @Email(message = "Formato do e-mail inválido")
     String email
 

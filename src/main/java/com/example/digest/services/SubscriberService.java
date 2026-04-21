@@ -17,7 +17,7 @@ public class SubscriberService {
 
     private final SubscriberRepository subscriberRepository;
 
-    public SubscriberDTO insertSubscriber(SubscriberDTO subscriberDTO) {
+    public SubscriberDTO createSubscriber(SubscriberDTO subscriberDTO) {
         String emailSanitized = subscriberDTO.email().toLowerCase(Locale.ROOT);
 
         if (subscriberRepository.existsByEmail(emailSanitized)) {
