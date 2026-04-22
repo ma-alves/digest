@@ -18,14 +18,14 @@ public class SubscriberService {
     private final SubscriberRepository subscriberRepository;
 
     public SubscriberDTO createSubscriber(SubscriberDTO subscriberDTO) {
-        String emailSanitized = subscriberDTO.email().toLowerCase(Locale.ROOT);
+        String sanitizedEmail = subscriberDTO.email().toLowerCase(Locale.ROOT);
 
-        if (subscriberRepository.existsByEmail(emailSanitized)) {
+        if (subscriberRepository.existsByEmail(sanitizedEmail)) {
             throw new DuplicateEmailException();
         }
 
         Subscriber subscriber = subscriberDTO.toEntity();
-        subscriber.setEmail(emailSanitized);
+        subscriber.setEmail(sanitizedEmail);
         subscriberRepository.save(subscriber);
 
         return SubscriberDTO.toDTO(subscriber);
