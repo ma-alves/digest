@@ -4,19 +4,19 @@ import lombok.*;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class NewsAPIRequest {
 
-    @NonNull
     private String country;
 
-    @NonNull
     private String category;
 
     private String sources;
+
     private String q;
 
-    @NonNull
     private Integer pageSize;
 
     private Integer page;

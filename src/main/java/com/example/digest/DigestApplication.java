@@ -20,7 +20,11 @@ public class DigestApplication {
 		return args -> {
 			System.out.println("=== NewsAPI Client Test ===");
 
-			NewsAPIRequest request = new NewsAPIRequest("us", "technology", 10);
+			NewsAPIRequest request = NewsAPIRequest.builder()
+					.country("us")
+					.category("technology")
+					.pageSize(10)
+					.build();
 
 			try {
 				NewsAPIResponse response = newsAPIClient.getTopHeadlines(request);
@@ -41,6 +45,7 @@ public class DigestApplication {
 			}
 
 			System.out.println("=== Test Complete ===");
+			System.exit(0);
 		};
 	}
 }
