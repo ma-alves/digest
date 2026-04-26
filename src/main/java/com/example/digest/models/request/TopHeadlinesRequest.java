@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsAPIRequest {
+public class TopHeadlinesRequest {
 
     private String country;
 

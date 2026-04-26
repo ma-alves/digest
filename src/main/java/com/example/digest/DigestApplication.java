@@ -1,7 +1,8 @@
 package com.example.digest;
 
 import com.example.digest.client.NewsAPIClient;
-import com.example.digest.models.request.NewsAPIRequest;
+import com.example.digest.models.request.EverythingRequest;
+import com.example.digest.models.request.TopHeadlinesRequest;
 import com.example.digest.models.response.NewsAPIResponse;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +21,7 @@ public class DigestApplication {
 		return args -> {
 			System.out.println("=== NewsAPI Client Test ===");
 
-			NewsAPIRequest request = NewsAPIRequest.builder()
+			TopHeadlinesRequest request = TopHeadlinesRequest.builder()
 					.country("us")
 					.category("technology")
 					.pageSize(10)
@@ -44,7 +45,33 @@ public class DigestApplication {
 				e.printStackTrace();
 			}
 
-			System.out.println("=== Test Complete ===");
+		EverythingRequest eRequest = EverythingRequest.builder()
+				.q("technology")
+				.language("en")
+				.sortBy("publishedAt")
+				.pageSize(10)
+				.build();
+
+		try {
+			NewsAPIResponse eResponse = newsAPIClient.getEverything(eRequest);
+
+			System.out.println("\n=== Everything Endpoint Test ===");
+			System.out.println("Status       : " + eResponse.getStatus());
+			System.out.println("Total Results: " + eResponse.getTotalResults());
+			System.out.println("--------------------------");
+
+			eResponse.getArticles().forEach(article ->
+					System.out.printf("[%s] %s%n",
+							article.getSource() != null ? article.getSource().getName() : "N/A",
+							article.getTitle())
+			);
+
+		} catch (Exception e) {
+			System.err.println("ERROR: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		System.out.println("=== Test Complete ===");
 			System.exit(0);
 		};
 	}
