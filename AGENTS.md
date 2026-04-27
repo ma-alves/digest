@@ -2,8 +2,10 @@
 
 ## Commands
 - Run app: `./mvnw spring-boot:run` (requires PostgreSQL running on localhost:5432)
-- Run tests: `./mvnw test`
+- Run tests: `./mvnw test` (only when explicitly requested)
 - Package: `./mvnw package`
+
+> **Note:** Do not run tests unless explicitly requested by the user.
 
 ## Development Setup
 

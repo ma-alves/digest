@@ -1,9 +1,9 @@
 package com.example.digest;
 
 import com.example.digest.client.NewsAPIClient;
-import com.example.digest.models.request.EverythingRequest;
-import com.example.digest.models.request.TopHeadlinesRequest;
-import com.example.digest.models.response.NewsAPIResponse;
+import com.example.digest.client.request.EverythingRequest;
+import com.example.digest.client.request.TopHeadlinesRequest;
+import com.example.digest.client.response.NewsAPIResponse;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -72,7 +72,7 @@ public class DigestApplication {
 		}
 
 		System.out.println("=== Test Complete ===");
-			System.exit(0);
+			System.exit(1);
 		};
 	}
 }

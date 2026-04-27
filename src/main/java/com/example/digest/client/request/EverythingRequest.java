@@ -1,4 +1,4 @@
-package com.example.digest.models.request;
+package com.example.digest.client.request;
 
 import lombok.*;
 

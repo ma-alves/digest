@@ -1,8 +1,8 @@
 package com.example.digest.client;
 
-import com.example.digest.models.request.TopHeadlinesRequest;
-import com.example.digest.models.request.EverythingRequest;
-import com.example.digest.models.response.NewsAPIResponse;
+import com.example.digest.client.request.TopHeadlinesRequest;
+import com.example.digest.client.request.EverythingRequest;
+import com.example.digest.client.response.NewsAPIResponse;
 import io.netty.channel.ChannelOption;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;

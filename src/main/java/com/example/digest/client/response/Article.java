@@ -1,4 +1,4 @@
-package com.example.digest.models.response;
+package com.example.digest.client.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
