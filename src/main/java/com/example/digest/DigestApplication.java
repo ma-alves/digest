@@ -21,34 +21,36 @@ public class DigestApplication {
 		return args -> {
 			System.out.println("=== NewsAPI Client Test ===");
 
-			TopHeadlinesRequest request = TopHeadlinesRequest.builder()
-					.country("us")
-					.category("technology")
-					.pageSize(10)
-					.build();
-
-			try {
-				NewsAPIResponse response = newsAPIClient.getTopHeadlines(request);
-
-				System.out.println("Status       : " + response.getStatus());
-				System.out.println("Total Results: " + response.getTotalResults());
-				System.out.println("--------------------------");
-
-				response.getArticles().forEach(article ->
-						System.out.printf("[%s] %s%n",
-								article.getSource() != null ? article.getSource().getName() : "N/A",
-								article.getTitle())
-				);
-
-			} catch (Exception e) {
-				System.err.println("ERROR: " + e.getMessage());
-				e.printStackTrace();
-			}
+//			TopHeadlinesRequest request = TopHeadlinesRequest.builder()
+//					.country("us")
+//					.category("technology")
+//					.pageSize(10)
+//					.build();
+//
+//			try {
+//				NewsAPIResponse response = newsAPIClient.getTopHeadlines(request);
+//
+//				System.out.println("Status       : " + response.getStatus());
+//				System.out.println("Total Results: " + response.getTotalResults());
+//				System.out.println("--------------------------");
+//
+//				response.getArticles().forEach(article ->
+//						System.out.printf("[%s] %s%n",
+//								article.getSource() != null ? article.getSource().getName() : "N/A",
+//								article.getTitle())
+//				);
+//
+//			} catch (Exception e) {
+//				System.err.println("ERROR: " + e.getMessage());
+//				e.printStackTrace();
+//			}
 
 		EverythingRequest eRequest = EverythingRequest.builder()
-				.q("technology")
-				.language("en")
-				.sortBy("publishedAt")
+				.q("ia")
+				.searchIn("content,description")
+				.language("pt")
+				.from("2026-04-25")
+//				.sortBy("relevancy")
 				.pageSize(10)
 				.build();
 
@@ -61,8 +63,9 @@ public class DigestApplication {
 			System.out.println("--------------------------");
 
 			eResponse.getArticles().forEach(article ->
-					System.out.printf("[%s] %s%n",
+					System.out.printf("[%s] - %s%n - %s%n",
 							article.getSource() != null ? article.getSource().getName() : "N/A",
+							article.getPublishedAt() != null ? article.getPublishedAt() : "N/A",
 							article.getTitle())
 			);
 

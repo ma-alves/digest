@@ -37,9 +37,9 @@ public class NewsAPIClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/top-headlines")
-                        .queryParam("country", topHeadlinesRequest.getCountry())
-                        .queryParam("category", topHeadlinesRequest.getCategory())
-                        .queryParam("pageSize", topHeadlinesRequest.getPageSize())
+                        .queryParamIfPresent("country", Optional.ofNullable(topHeadlinesRequest.getCountry()))
+                        .queryParamIfPresent("category", Optional.ofNullable(topHeadlinesRequest.getCategory()))
+                        .queryParamIfPresent("pageSize", Optional.ofNullable(topHeadlinesRequest.getPageSize()))
                         .queryParamIfPresent("sources", Optional.ofNullable(topHeadlinesRequest.getSources()))
                         .queryParamIfPresent("q", Optional.ofNullable(topHeadlinesRequest.getQ()))
                         .queryParamIfPresent("page", Optional.ofNullable(topHeadlinesRequest.getPage()))

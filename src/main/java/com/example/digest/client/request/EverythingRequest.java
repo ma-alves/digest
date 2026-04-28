@@ -11,6 +11,8 @@ public class EverythingRequest {
 
     private String q;
 
+    private String searchIn;
+
     private String sources;
 
     private String domains;
