@@ -18,26 +18,10 @@ public class Mail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "subject", nullable = false)
-    private String subject;
-
-    @Column(name = "recipient_email", nullable = false)
-    private String recipientEmail;
-
-    @Column(name = "status", nullable = false)
-    private String status; // PENDING, SENT, FAILED
-
-    @Column(name = "error_message")
-    private String errorMessage;
+    @Column(name = "content", nullable = false)
+    private String content;
 
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @Column(name = "sent_at")
-    private LocalDateTime sentAt;
-
-    @ManyToOne
-    @JoinColumn(name = "newsletter_id")
-    private Newsletter newsletter;
 }
