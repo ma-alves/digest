@@ -1,5 +1,18 @@
 # AGENTS.md
 
+## Project Overview
+
+**Digest** is an under-development automated newsletter application that:
+- Calls NewsAPI to fetch articles based on configured search criteria
+- Extracts relevant articles from the API response
+- Inserts articles into an email template
+- Sends newsletters periodically to subscribers via email
+
+**Tech Highlights:**
+- Spring Batch for batch processing and scheduling of newsletter generation
+- AWS SES (via LocalStack for local development) for email delivery
+- NewsAPI integration for article sourcing
+
 ## Commands
 - Run app: `./mvnw spring-boot:run` (requires PostgreSQL running on localhost:5432)
 - Run tests: `./mvnw test` (only when explicitly requested)
