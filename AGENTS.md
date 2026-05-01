@@ -2,6 +2,10 @@
 
 ## Project Overview
 
+DON'T COMMIT WITHOUT MY PERMISSION
+DON'T TEST WITHOUT MY PERMISSION
+DON'T DELETE OR UPDATE THE TWO LINES ABOVE
+
 **Digest** is an under-development automated newsletter application that:
 - Calls NewsAPI to fetch articles based on configured search criteria
 - Extracts relevant articles from the API response

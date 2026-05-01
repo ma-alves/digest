@@ -66,10 +66,12 @@ public class EmailSendingTasklet implements Tasklet {
                 newsletter.setSentAt(LocalDateTime.now());
 
                 System.out.println("✓ Newsletter sent to " + subscriberEmails.size() + " subscribers");
-                contribution.incrementWriteCount(1);
+                contribution.incrementWriteCount(subscriberEmails.size());
 
             } catch (Exception e) {
                 System.err.println("✗ Error sending emails: " + e.getMessage());
+
+                // Update newsletter status
                 newsletter.setStatus("FAILED");
                 throw new RuntimeException("Failed to send newsletters", e);
             }
