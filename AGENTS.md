@@ -14,7 +14,7 @@ DON'T DELETE OR UPDATE THE TWO LINES ABOVE
 
 **Tech Highlights:**
 - Spring Batch for batch processing and scheduling of newsletter generation
-- AWS SES (via LocalStack for local development) for email delivery
+- AWS SES for email delivery
 - NewsAPI integration for article sourcing
 
 ## Commands
@@ -26,12 +26,14 @@ DON'T DELETE OR UPDATE THE TWO LINES ABOVE
 
 ## Development Setup
 
+The application requires AWS SES credentials to send emails. Set up your environment by copying `.env.example` to `.env` and adding your AWS credentials.
+
 ### Option 1: Docker Compose (Recommended)
 ```bash
 # Start PostgreSQL database
 docker-compose up -d postgres
 
-# Run application (requires NEWSAPI_KEY in .env)
+# Run application (requires AWS credentials in .env)
 ./mvnw spring-boot:run
 ```
 
@@ -45,6 +47,8 @@ docker exec <container-name> psql -U postgres -c "CREATE DATABASE digest;"
 
 # Run application
 export NEWSAPI_KEY=$(grep NEWSAPI_KEY .env | cut -d'=' -f2)
+export AWS_ACCESS_KEY_ID=$(grep AWS_ACCESS_KEY_ID .env | cut -d'=' -f2)
+export AWS_SECRET_ACCESS_KEY=$(grep AWS_SECRET_ACCESS_KEY .env | cut -d'=' -f2)
 ./mvnw spring-boot:run
 ```
 
@@ -53,7 +57,7 @@ export NEWSAPI_KEY=$(grep NEWSAPI_KEY .env | cut -d'=' -f2)
 - Test properties file: `src/test/resources/application.properties` with dummy API key
 
 ## Setup Files
-- `.env.example`: Copy to `.env` and add your NEWSAPI_KEY
+- `.env.example`: Copy to `.env` and add your NEWSAPI_KEY and AWS credentials
 - `docker-compose.yaml`: PostgreSQL setup with `digest` database pre-created
 
 ## Architecture

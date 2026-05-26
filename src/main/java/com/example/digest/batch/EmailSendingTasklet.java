@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// quebrar operações em métodos, muito grande
 @Component
 public class EmailSendingTasklet implements Tasklet {
 
