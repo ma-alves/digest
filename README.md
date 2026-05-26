@@ -114,7 +114,7 @@ digest/
 └── pom.xml                   # Dependências Maven
 ```
 
-## CI/CD com GitHub Actions
+## CI/CD 
 
 O projeto utiliza **GitHub Actions** para automação de build, testes e deploy. A pipeline é executada automaticamente em pushes para a branch `main`.
 
@@ -148,6 +148,7 @@ A pipeline configurada em `.github/workflows/deploy.yml` realiza as seguintes et
 
 O projeto inclui testes de integração que validam:
 - Carregamento do contexto Spring com todas as configurações
+
 *Observação: a cobertura de testes ainda não está completa*
 
 *Documento parcialmente gerado por IA, revisado e mantido por ma-alves.*
