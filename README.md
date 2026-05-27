@@ -1,5 +1,7 @@
 # Digest
 
+*Legado da aplicação atualmente utilizada como referência.*
+
 Digest é uma aplicação de newsletter automatizada que busca artigos da NewsAPI com base em critérios configuráveis, gera um email estilizado com Thymeleaf e envia a newsletter periodicamente para assinantes via AWS SES. O processo é orquestrado por um pipeline Spring Batch de 3 etapas, agendado diariamente com Quartz Scheduler.
 
 ## Tech Stack
