@@ -1,0 +1,21 @@
+{
+  "name": "digest",
+  "version": "1.0.0",
+  "description": "Digest é uma aplicação de newsletter automatizada que busca artigos da NewsAPI com base em critérios configuráveis, gera um email estilizado com Thymeleaf e envia a newsletter periodicamente para assinantes via AWS SES. O processo é orquestrado por um pipeline Spring Batch de 3 etapas, agendado diariamente com Quartz Scheduler.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ma-alves/digest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ma-alves/digest/issues"
+  },
+  "homepage": "https://github.com/ma-alves/digest#readme"
+}
