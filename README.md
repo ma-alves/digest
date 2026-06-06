@@ -13,11 +13,11 @@ Digest is a serverless automated newsletter application built with TypeScript an
 - **SES** sends emails in batches of 50 with exponential backoff retry
 - **Secrets Manager** stores the NewsAPI key
 - **SNS** notifies admins on workflow failures
-- **CDK** (TypeScript) defines all infrastructure
+- **Terraform** (HCL) defines all infrastructure
 
 ## Tech Stack
 
-- TypeScript, Node.js 20, AWS CDK
+- TypeScript, Node.js 24, Terraform
 - Lambda, API Gateway, Step Functions, EventBridge
 - DynamoDB, S3, SES, SNS, Secrets Manager, CloudWatch
 - Handlebars, Zod, Axios, ULID
@@ -28,17 +28,23 @@ Digest is a serverless automated newsletter application built with TypeScript an
 git clone https://github.com/ma-alves/digest.git
 cp .env.example .env
 # edit .env with your credentials
-npx cdk bootstrap
-npm run cdk:deploy
+
+# Bootstrap Terraform state backend (first time only)
+bash scripts/bootstrap-state.sh
+
+# Install deps + build Lambdas + deploy
+npm ci
+npm run build:lambdas
+npm run tf:apply
 ```
 
 ## Project Structure
 
 ```
 digest/
-├── cdk/               # CDK stacks (Database, Api, Newsletter, Scheduler, etc.)
+├── terraform/           # Terraform modules (database, api, lambdas, workflow, monitoring)
 ├── lambdas/
-│   ├── shared/        # Lambda Layer (models, DynamoDB client, validators)
+│   ├── shared/          # Lambda Layer (models, DynamoDB client, validators)
 │   ├── subscribe-handler/
 │   ├── list-subscribers/
 │   ├── unsubscribe-handler/
@@ -54,8 +60,8 @@ digest/
 
 ## CI/CD
 
-GitHub Actions runs tests and deploys all stacks via `cdk deploy --all` on pushes to `main`.
+GitHub Actions runs `build:lambdas` → `npm test` → `terraform apply` on pushes to `main`.
 
 ## Testing
 
-Unit tests with Jest + `aws-sdk-client-mock`, infrastructure tests with CDK assertions.
+Unit tests with Jest + `aws-sdk-client-mock`.

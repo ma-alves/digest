@@ -1,0 +1,11 @@
+region     = "us-east-1"
+name_prefix = "digest"
+
+newsapi_key = "your-newsapi-key-here"
+from_email  = "newsletter@yourdomain.com"
+admin_email = "admin@yourdomain.com"
+
+search_query  = "technology"
+language      = "en"
+article_count = 10
+max_retries   = 3
