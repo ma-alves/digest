@@ -4,15 +4,19 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
     }
   }
 
+  # this is the backend for the Terraform state.
+  # it is used to store the state of the Terraform configuration.
+  # it is a good practice to use a backend to store the state of the Terraform configuration.
   backend "s3" {
     bucket         = "digest-terraform-state"
     key            = "digest/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-locks"
     encrypt        = true
+    use_lockfile   = true
   }
 }
