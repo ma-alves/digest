@@ -29,7 +29,7 @@ resource "aws_lambda_function" "this" {
   function_name    = var.name
   role             = aws_iam_role.this.arn
   handler          = var.handler
-  runtime          = "nodejs22.x"
+  runtime          = "nodejs24.x"
   memory_size      = var.memory_size
   timeout          = var.timeout
   source_code_hash = filebase64sha256(var.source_zip)
