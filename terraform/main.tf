@@ -9,6 +9,15 @@ module "database" {
   name_prefix = var.name_prefix
 }
 
+# --- Template upload ---
+resource "aws_s3_object" "template" {
+  bucket = module.database.template_bucket_id
+  key    = "template.hbs"
+  source = "../handlers/generate-newsletter/template.hbs"
+  etag   = filemd5("../handlers/generate-newsletter/template.hbs")
+  content_type = "text/x-handlebars"
+}
+
 # --- Lambda Layer (shared code) ---
 module "lambda_layer" {
   source = "./modules/lambda-layer"

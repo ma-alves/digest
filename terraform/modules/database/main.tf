@@ -35,9 +35,17 @@ resource "aws_dynamodb_table" "newsletters" {
 
   global_secondary_index {
     name            = "byStatus"
-    hash_key        = "status"
-    range_key       = "generatedAt"
     projection_type = "ALL"
+
+    key_schema {
+      attribute_name = "status"
+      key_type       = "HASH"
+    }
+
+    key_schema {
+      attribute_name = "generatedAt"
+      key_type       = "RANGE"
+    }
   }
 
   point_in_time_recovery {
@@ -48,23 +56,34 @@ resource "aws_dynamodb_table" "newsletters" {
 resource "aws_s3_bucket" "template" {
   bucket        = "${var.name_prefix}-templates"
   force_destroy = false
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "template" {
+  bucket = aws_s3_bucket.template.id
+  versioning_configuration {
+    status = "Enabled"
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_lifecycle_configuration" "template" {
+  bucket = aws_s3_bucket.template.id
+
+  rule {
+    id     = "expire-noncurrent"
+    status = "Enabled"
+
+    noncurrent_version_expiration {
+      noncurrent_days = 30
     }
   }
+}
 
-  lifecycle_rule {
-    enabled = true
-    noncurrent_version_expiration {
-      days = 30
+resource "aws_s3_bucket_server_side_encryption_configuration" "template" {
+  bucket = aws_s3_bucket.template.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -72,19 +91,27 @@ resource "aws_s3_bucket" "template" {
 resource "aws_s3_bucket" "html" {
   bucket        = "${var.name_prefix}-rendered-html"
   force_destroy = true
+}
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
+resource "aws_s3_bucket_lifecycle_configuration" "html" {
+  bucket = aws_s3_bucket.html.id
 
-  lifecycle_rule {
-    enabled = true
+  rule {
+    id     = "expire-old"
+    status = "Enabled"
+
     expiration {
       days = 90
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "html" {
+  bucket = aws_s3_bucket.html.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
