@@ -5,22 +5,22 @@ Digest is a serverless automated newsletter application built with TypeScript an
 ## Architecture
 
 - **EventBridge Scheduler** triggers the workflow daily at 08:00 UTC
-- **Step Functions** orchestrates the newsletter pipeline (fetch → generate → send)
+- **Step Functions** orchestrates the newsletter pipeline (fetch → generate → send → mark → notify)
 - **API Gateway** handles subscriber CRUD (POST/GET `/api/v1/subscribers`, GET `/unsubscribe`)
-- **Lambda** (Node.js 20) provides all compute — 8 handlers
-- **DynamoDB** stores subscribers and newsletters (2 tables, PAY_PER_REQUEST)
+- **Lambda** (Node.js 24) provides all compute — 8 handlers
+- **DynamoDB** stores subscribers and newsletters (2 tables, PAY_PER_REQUEST, GSI on newsletters)
 - **S3** stores Handlebars templates and rendered HTML
 - **SES** sends emails in batches of 50 with exponential backoff retry
 - **Secrets Manager** stores the NewsAPI key
 - **SNS** notifies admins on workflow failures
-- **CDK** (TypeScript) defines all infrastructure
+- **Terraform** (HCL) defines all infrastructure
 
 ## Tech Stack
 
-- TypeScript, Node.js 20, AWS CDK
+- TypeScript, Node.js 24, Terraform (HCL)
 - Lambda, API Gateway, Step Functions, EventBridge
 - DynamoDB, S3, SES, SNS, Secrets Manager, CloudWatch
-- Handlebars, Zod, Axios, ULID
+- Handlebars, Zod, Axios, ULID, esbuild
 
 ## Setup
 
@@ -28,34 +28,75 @@ Digest is a serverless automated newsletter application built with TypeScript an
 git clone https://github.com/ma-alves/digest.git
 cp .env.example .env
 # edit .env with your credentials
-npx cdk bootstrap
-npm run cdk:deploy
+
+# Bootstrap Terraform state backend (first time only)
+bash scripts/bootstrap-state.sh
+
+# Install deps + build Lambdas + deploy
+npm ci
+npm run build:lambdas
+npm run tf:apply
 ```
 
 ## Project Structure
 
 ```
 digest/
-├── cdk/               # CDK stacks (Database, Api, Newsletter, Scheduler, etc.)
-├── lambdas/
-│   ├── shared/        # Lambda Layer (models, DynamoDB client, validators)
-│   ├── subscribe-handler/
-│   ├── list-subscribers/
-│   ├── unsubscribe-handler/
-│   ├── fetch-articles/
-│   ├── generate-newsletter/
-│   ├── send-emails/
-│   ├── mark-newsletter-status/
-│   └── notify-failure/
-├── scripts/
+├── terraform/                    # Terraform infrastructure
+│   ├── main.tf                   # Provider, module wiring, IAM policies
+│   ├── variables.tf              # Shared variables
+│   ├── outputs.tf                # API URL, SNS ARN, etc.
+│   ├── backend.tf                # S3 + DynamoDB state backend
+│   ├── terraform.tfvars.example  # Example deploy-time values
+│   ├── modules/
+│   │   ├── database/             # DynamoDB tables + S3 buckets
+│   │   ├── api/                  # API Gateway + routes
+│   │   ├── lambda-function/      # Reusable Lambda + IAM role
+│   │   ├── lambda-layer/         # Shared Lambda Layer
+│   │   ├── workflow/             # Step Functions + EventBridge + SNS
+│   │   └── monitoring/           # CloudWatch dashboard + alarms
+│   └── lambda-packages/          # Pre-built ZIPs (gitignored)
+├── handlers/                     # TypeScript Lambda handlers
+│   ├── shared/                   # Lambda Layer (models, DynamoDB client, Zod schemas, utils)
+│   ├── subscribe-handler/        # POST /api/v1/subscribers
+│   ├── list-subscribers/         # GET /api/v1/subscribers
+│   ├── unsubscribe-handler/      # GET /unsubscribe?email=
+│   ├── fetch-articles/           # NewsAPI caller (workflow step)
+│   ├── generate-newsletter/      # Handlebars rendering (workflow step)
+│   ├── send-emails/              # SES batching (workflow step)
+│   ├── mark-newsletter-status/   # Update DynamoDB (workflow step)
+│   └── notify-failure/           # SNS publish (workflow step)
+├── scripts/                      # Build + bootstrap + seed scripts
 ├── package.json
-└── tsconfig.json
+├── tsconfig.json
+├── jest.config.cjs
+└── .env.example
 ```
 
 ## CI/CD
 
-GitHub Actions runs tests and deploys all stacks via `cdk deploy --all` on pushes to `main`.
+GitHub Actions runs `build:lambdas` → `npm test` → `terraform apply` on pushes to `main`.
 
 ## Testing
 
-Unit tests with Jest + `aws-sdk-client-mock`, infrastructure tests with CDK assertions.
+Unit tests with **Jest 30** + `aws-sdk-client-mock` covering all 8 Lambda handlers. Each test file mocks AWS SDK clients (DynamoDB, S3, SES, SNS, Secrets Manager) to test handler logic in isolation.
+
+```bash
+npm test        # Run all tests
+npm run lint    # TypeScript type-check (tsc --noEmit)
+npm run test:watch  # Watch mode
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run build:lambdas` | esbuild + zip all handlers + layer |
+| `npm run lint` | TypeScript type-check |
+| `npm test` | Run all Jest tests |
+| `npm run test:watch` | Jest watch mode |
+| `npm run tf:init` | Terraform init |
+| `npm run tf:plan` | Terraform plan |
+| `npm run tf:apply` | Terraform apply |
+| `npm run tf:destroy` | Terraform destroy |
+| `npm run seed` | Seed subscribers into DynamoDB |
