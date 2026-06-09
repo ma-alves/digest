@@ -23,7 +23,7 @@ jobs:
       - run: npm ci
         working-directory: ./
 
-      - run: npm run build:lambdas
+      - run: npm run build:handlers
         working-directory: ./
 
       - run: npm test

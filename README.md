@@ -34,7 +34,7 @@ bash scripts/bootstrap-state.sh
 
 # Install deps + build Lambdas + deploy
 npm ci
-npm run build:lambdas
+npm run build:handlers
 npm run tf:apply
 ```
 
@@ -75,7 +75,7 @@ digest/
 
 ## CI/CD
 
-GitHub Actions runs `build:lambdas` → `npm test` → `terraform apply` on pushes to `main`.
+GitHub Actions runs `build:handlers` → `npm test` → `terraform apply` on pushes to `main`.
 
 ## Testing
 
@@ -91,7 +91,7 @@ npm run test:watch  # Watch mode
 
 | Command | Description |
 |---------|-------------|
-| `npm run build:lambdas` | esbuild + zip all handlers + layer |
+| `npm run build:handlers` | esbuild + zip all handlers + layer |
 | `npm run lint` | TypeScript type-check |
 | `npm test` | Run all Jest tests |
 | `npm run test:watch` | Jest watch mode |

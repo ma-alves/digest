@@ -7,7 +7,7 @@
   ],
   "type": "module",
   "scripts": {
-    "build:lambdas": "bash scripts/build-lambdas.sh",
+    "build:handlers": "bash scripts/build-handlers.sh",
     "tf:init": "terraform -chdir=terraform init",
     "tf:plan": "terraform -chdir=terraform plan",
     "tf:apply": "terraform -chdir=terraform apply",
