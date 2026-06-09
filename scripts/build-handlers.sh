@@ -30,7 +30,7 @@ npm install zod@^3.23.0 --no-audit --no-fund --omit=dev 2>&1 | tail -3
 rm -f package.json package-lock.json
 cd - > /dev/null
 
-cd "$LAYER_DIR" && zip -r "../../$PKG/digest-shared-layer.zip" . && cd ../..
+mkdir -p "$PKG" && cd "$LAYER_DIR" && zip -r "../../$PKG/digest-shared-layer.zip" . && cd ../..
 
 echo "=== Building Lambda handlers ==="
 mkdir -p "$DIST"
