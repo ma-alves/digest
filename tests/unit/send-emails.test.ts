@@ -2,7 +2,7 @@ import { mockClient } from 'aws-sdk-client-mock'
 import { DynamoDBDocumentClient, ScanCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
-import { handler } from './index'
+import { handler } from '../../handlers/send-emails'
 
 function mockS3Body(body: string) {
   return { transformToString: () => Promise.resolve(body) } as any
@@ -55,12 +55,11 @@ it('sends emails and returns counts', async () => {
 })
 
 it('throws when S3 fetch fails', async () => {
-  ddbMock.on(ScanCommand).resolves({
-    Items: [{ email: 'alice@example.com' }],
-  })
+  ddbMock.on(ScanCommand).resolves({ Items: [{ email: 'alice@example.com' }] })
   s3Mock.on(GetObjectCommand).rejects(new Error('S3 error'))
 
-  await expect(handler({ newsletterId: 'test-id', htmlS3Key: 'newsletters/test.html' })).rejects.toThrow('S3 error')
+  await expect(handler({ newsletterId: 'test-id', htmlS3Key: 'newsletters/test.html' }))
+    .rejects.toThrow('S3 error')
 })
 
 it('handles partial SES failures', async () => {

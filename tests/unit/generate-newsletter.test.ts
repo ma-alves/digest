@@ -1,7 +1,7 @@
 import { mockClient } from 'aws-sdk-client-mock'
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
-import { handler } from './index'
+import { handler } from '../../handlers/generate-newsletter/index'
 
 function mockS3Body(body: string) {
   return { transformToString: () => Promise.resolve(body) } as any

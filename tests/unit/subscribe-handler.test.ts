@@ -1,7 +1,7 @@
 import { mockClient } from 'aws-sdk-client-mock'
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb'
-import { handler } from './index'
+import { handler } from '../../handlers/subscribe-handler'
 
 const ddbMock = mockClient(DynamoDBDocumentClient)
 

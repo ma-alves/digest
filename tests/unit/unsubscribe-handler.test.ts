@@ -1,6 +1,6 @@
 import { mockClient } from 'aws-sdk-client-mock'
 import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb'
-import { handler } from './index'
+import { handler } from '../../handlers/unsubscribe-handler'
 
 const ddbMock = mockClient(DynamoDBDocumentClient)
 
@@ -9,18 +9,14 @@ beforeEach(() => {
   process.env.SUBSCRIBERS_TABLE = 'digest-subscribers'
 })
 
-it('returns 200 with HTML page when unsubscribed successfully', async () => {
-  ddbMock.on(UpdateCommand).resolves({
-    Attributes: { email: 'test@example.com', status: 'UNSUBSCRIBED' },
-  })
+it('returns 200 with HTML page on successful unsubscribe', async () => {
+  ddbMock.on(UpdateCommand).resolves({ Attributes: { email: 'test@example.com', status: 'UNSUBSCRIBED' } })
 
-  const result = await handler({
-    queryStringParameters: { email: 'test@example.com' },
-  } as any)
+  const result = await handler({ queryStringParameters: { email: 'test@example.com' } } as any)
 
   expect(result.statusCode).toBe(200)
   expect(result.headers!['Content-Type']).toBe('text/html')
-  expect(result.body).toContain('Unsubscribed')
+  expect(result.body).toContain('html')
 })
 
 it('returns 400 when email query param is missing', async () => {
@@ -31,12 +27,18 @@ it('returns 400 when email query param is missing', async () => {
   expect(body.error).toBe('VALIDATION_ERROR')
 })
 
+it('returns 400 when email is invalid', async () => {
+  const result = await handler({ queryStringParameters: { email: 'not-an-email' } } as any)
+
+  expect(result.statusCode).toBe(400)
+  const body = JSON.parse(result.body)
+  expect(body.error).toBe('VALIDATION_ERROR')
+})
+
 it('returns 404 when email not found', async () => {
   ddbMock.on(UpdateCommand).resolves({ Attributes: undefined })
 
-  const result = await handler({
-    queryStringParameters: { email: 'unknown@example.com' },
-  } as any)
+  const result = await handler({ queryStringParameters: { email: 'unknown@example.com' } } as any)
 
   expect(result.statusCode).toBe(404)
   const body = JSON.parse(result.body)
@@ -46,9 +48,7 @@ it('returns 404 when email not found', async () => {
 it('returns 500 on DynamoDB error', async () => {
   ddbMock.on(UpdateCommand).rejects(new Error('DynamoDB error'))
 
-  const result = await handler({
-    queryStringParameters: { email: 'test@example.com' },
-  } as any)
+  const result = await handler({ queryStringParameters: { email: 'test@example.com' } } as any)
 
   expect(result.statusCode).toBe(500)
   const body = JSON.parse(result.body)
