@@ -14,6 +14,7 @@
     "tf:destroy": "terraform -chdir=terraform destroy",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:integration": "jest --config jest.integration.config.cjs",
     "lint": "tsc --noEmit",
     "seed": "ts-node scripts/seed-subscribers.ts"
   },
