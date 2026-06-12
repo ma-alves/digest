@@ -1,16 +1,16 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { PutCommand } from '@aws-sdk/lib-dynamodb'
 import { ulid } from 'ulid'
-import { getDynamoDBClient, compileTemplate, NewsletterStatus } from 'digest-shared'
+import { getDynamoDBClient, compileTemplate, NewsletterStatus, requireEnv } from 'digest-shared'
 import type { Article } from 'digest-shared'
 
 const s3 = new S3Client({})
 const ddb = getDynamoDBClient()
 
-const TEMPLATE_BUCKET = process.env.TEMPLATE_BUCKET!
+const TEMPLATE_BUCKET = requireEnv('TEMPLATE_BUCKET')
 const TEMPLATE_KEY = process.env.TEMPLATE_KEY ?? 'template.hbs'
-const NEWSLETTERS_TABLE = process.env.NEWSLETTERS_TABLE!
-const HTML_BUCKET = process.env.HTML_BUCKET!
+const NEWSLETTERS_TABLE = requireEnv('NEWSLETTERS_TABLE')
+const HTML_BUCKET = requireEnv('HTML_BUCKET')
 
 let cachedTemplate: string | undefined
 

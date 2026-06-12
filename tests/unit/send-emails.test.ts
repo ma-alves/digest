@@ -74,8 +74,6 @@ it('handles partial SES failures', async () => {
   })
   sesMock.on(SendEmailCommand).rejects(new Error('SES error'))
 
-  const result = await handler({ newsletterId: 'test-id', htmlS3Key: 'newsletters/test.html' })
-
-  expect(result.sentCount).toBe(0)
-  expect(result.failedCount).toBe(2)
+  await expect(handler({ newsletterId: 'test-id', htmlS3Key: 'newsletters/test.html' }))
+    .rejects.toThrow('Failed to send 2 out of 2 emails')
 })

@@ -1,7 +1,8 @@
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns'
+import { requireEnv } from 'digest-shared'
 
 const sns = new SNSClient({})
-const TOPIC_ARN = process.env.SNS_TOPIC_ARN!
+const TOPIC_ARN = requireEnv('SNS_TOPIC_ARN')
 
 interface Input {
   error?: unknown

@@ -12,9 +12,9 @@ terraform {
   # it is used to store the state of the Terraform configuration.
   # it is a good practice to use a backend to store the state of the Terraform configuration.
   backend "s3" {
-    bucket         = "digest-terraform-state"
-    key            = "digest/terraform.tfstate"
-    region         = "us-east-1"
+    bucket       = "digest-terraform-state"
+    key          = "digest/terraform.tfstate"
+    region       = "us-east-1"
     encrypt      = true
     use_lockfile = true
   }

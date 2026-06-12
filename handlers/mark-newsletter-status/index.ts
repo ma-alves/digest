@@ -1,7 +1,7 @@
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
-import { getDynamoDBClient } from 'digest-shared'
+import { getDynamoDBClient, requireEnv } from 'digest-shared'
 
-const NEWSLETTERS_TABLE = process.env.NEWSLETTERS_TABLE!
+const NEWSLETTERS_TABLE = requireEnv('NEWSLETTERS_TABLE')
 const ddb = getDynamoDBClient()
 
 interface Input {
@@ -14,6 +14,10 @@ interface Input {
 export async function handler(input: Input): Promise<{ success: boolean }> {
   const { newsletterId, status, sendResult, error } = input
   const now = new Date().toISOString()
+
+  if (!newsletterId) {
+    return { success: true }
+  }
 
   const updateExpression: string[] = ['SET #status = :status']
   const expressionAttributeNames: Record<string, string> = { '#status': 'status' }

@@ -11,10 +11,10 @@ module "database" {
 
 # --- Template upload ---
 resource "aws_s3_object" "template" {
-  bucket = module.database.template_bucket_id
-  key    = "template.hbs"
-  source = "../handlers/generate-newsletter/template.hbs"
-  etag   = filemd5("../handlers/generate-newsletter/template.hbs")
+  bucket       = module.database.template_bucket_id
+  key          = "template.hbs"
+  source       = "../handlers/generate-newsletter/template.hbs"
+  etag         = filemd5("../handlers/generate-newsletter/template.hbs")
   content_type = "text/x-handlebars"
 }
 
@@ -101,10 +101,10 @@ module "generate_newsletter" {
   memory_size = 256
   timeout     = 30
   env_vars = {
-    TEMPLATE_BUCKET     = module.database.template_bucket_id
-    TEMPLATE_KEY        = "template.hbs"
-    NEWSLETTERS_TABLE   = module.database.newsletters_table_name
-    HTML_BUCKET         = module.database.html_bucket_id
+    TEMPLATE_BUCKET   = module.database.template_bucket_id
+    TEMPLATE_KEY      = "template.hbs"
+    NEWSLETTERS_TABLE = module.database.newsletters_table_name
+    HTML_BUCKET       = module.database.html_bucket_id
   }
   policy_arns = [
     aws_iam_policy.generate_newsletter_s3.arn,
@@ -169,13 +169,13 @@ module "notify_failure" {
 module "api" {
   source = "./modules/api"
 
-  name_prefix                   = var.name_prefix
-  subscribe_handler_invoke_arn  = module.subscribe_handler.invoke_arn
-  subscribe_handler_name        = module.subscribe_handler.name
-  list_subscribers_invoke_arn   = module.list_subscribers.invoke_arn
-  list_subscribers_name         = module.list_subscribers.name
+  name_prefix                    = var.name_prefix
+  subscribe_handler_invoke_arn   = module.subscribe_handler.invoke_arn
+  subscribe_handler_name         = module.subscribe_handler.name
+  list_subscribers_invoke_arn    = module.list_subscribers.invoke_arn
+  list_subscribers_name          = module.list_subscribers.name
   unsubscribe_handler_invoke_arn = module.unsubscribe_handler.invoke_arn
-  unsubscribe_handler_name      = module.unsubscribe_handler.name
+  unsubscribe_handler_name       = module.unsubscribe_handler.name
 }
 
 # --- Step Functions + EventBridge + SNS ---

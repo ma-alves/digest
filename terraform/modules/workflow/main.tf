@@ -70,6 +70,12 @@ resource "aws_sfn_state_machine" "workflow" {
   }
 }
 
+resource "aws_sqs_queue" "scheduler_dlq" {
+  name                       = "${var.name_prefix}-scheduler-dlq"
+  message_retention_seconds  = 1209600
+  visibility_timeout_seconds = 60
+}
+
 resource "aws_iam_role" "scheduler" {
   name = "${var.name_prefix}-scheduler-role"
 
@@ -99,6 +105,20 @@ resource "aws_iam_role_policy" "scheduler_invoke_sfn" {
   })
 }
 
+resource "aws_iam_role_policy" "scheduler_send_to_dlq" {
+  name = "${var.name_prefix}-scheduler-send-to-dlq"
+  role = aws_iam_role.scheduler.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "sqs:SendMessage"
+      Resource = aws_sqs_queue.scheduler_dlq.arn
+    }]
+  })
+}
+
 resource "aws_scheduler_schedule" "daily" {
   name                         = "${var.name_prefix}-daily-trigger"
   schedule_expression          = "cron(0 8 * * ? *)"
@@ -113,5 +133,9 @@ resource "aws_scheduler_schedule" "daily" {
     arn      = aws_sfn_state_machine.workflow.arn
     role_arn = aws_iam_role.scheduler.arn
     input    = jsonencode({})
+
+    dead_letter_config {
+      arn = aws_sqs_queue.scheduler_dlq.arn
+    }
   }
 }
