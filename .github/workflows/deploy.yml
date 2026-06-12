@@ -7,6 +7,13 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-east-1
+      TF_VAR_newsapi_key: ${{ secrets.NEWSAPI_KEY }}
+      TF_VAR_from_email: ${{ secrets.FROM_EMAIL }}
+      TF_VAR_admin_email: ${{ secrets.ADMIN_EMAIL }}
     defaults:
       run:
         working-directory: terraform
@@ -35,10 +42,3 @@ jobs:
 
       - name: Apply
         run: terraform apply -auto-approve tfplan
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
-          TF_VAR_newsapi_key: ${{ secrets.NEWSAPI_KEY }}
-          TF_VAR_from_email: ${{ secrets.FROM_EMAIL }}
-          TF_VAR_admin_email: ${{ secrets.ADMIN_EMAIL }}
