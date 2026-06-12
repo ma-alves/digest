@@ -57,7 +57,7 @@ for LAMBDA in \
     cp "handlers/$LAMBDA/template.hbs" "$DIST/$LAMBDA/"
   fi
 
-  cd "$DIST/$LAMBDA" && zip -r "../../$PKG/$LAMBDA.zip" . && cd ../..
+  mkdir -p "$PKG" && cd "$DIST/$LAMBDA" && zip -r "../../$PKG/$LAMBDA.zip" . && cd ../..
 done
 
 echo "=== Done ==="
