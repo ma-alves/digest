@@ -1,6 +1,6 @@
 import { mockClient } from 'aws-sdk-client-mock'
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb'
-import { handler } from './index'
+import { handler } from '../../handlers/list-subscribers'
 
 const ddbMock = mockClient(DynamoDBDocumentClient)
 

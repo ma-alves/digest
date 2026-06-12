@@ -1,10 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
-import { getDynamoDBClient, emailQuerySchema, SubscriberStatus } from 'digest-shared'
+import { getDynamoDBClient, emailQuerySchema, SubscriberStatus, requireEnv } from 'digest-shared'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
-const TABLE_NAME = process.env.SUBSCRIBERS_TABLE!
+const TABLE_NAME = requireEnv('SUBSCRIBERS_TABLE')
 const ddb = getDynamoDBClient()
 
 function getHtmlPage(): string {

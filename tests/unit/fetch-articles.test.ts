@@ -1,7 +1,7 @@
 import { mockClient } from 'aws-sdk-client-mock'
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager'
 import axios from 'axios'
-import { handler } from './index'
+import { handler } from '../../handlers/fetch-articles/index'
 
 const secretsMock = mockClient(SecretsManagerClient)
 

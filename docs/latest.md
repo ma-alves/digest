@@ -17,7 +17,7 @@ Built the Step Functions orchestration layer, all 5 workflow Lambda handlers, Cl
 - 5 new Lambda modules: `fetch_articles`, `generate_newsletter`, `send_emails`, `mark_newsletter_status`, `notify_failure`
 - 8 new IAM policy resources for workflow handler permissions
 - Wired `workflow` and `monitoring` modules
-- Full dependency graph: database → layer → lambdas → api → workflow → monitoring
+- Full dependency graph: database → layer → handlers → api → workflow → monitoring
 
 ### Shared Layer (`handlers/shared/`)
 
@@ -53,4 +53,4 @@ FetchArticles → GenerateNewsletter → SendEmails → MarkSent
 
 ## Build Artifacts
 
-9 zips in `terraform/lambda-packages/` (1 layer + 8 handlers), built via `npm run build:lambdas`.
+9 zips in `terraform/lambda-packages/` (1 layer + 8 handlers), built via `npm run build:handlers`.

@@ -12,3 +12,8 @@ output "schedule_arn" {
   description = "EventBridge schedule ARN"
   value       = aws_scheduler_schedule.daily.arn
 }
+
+output "scheduler_dlq_arn" {
+  description = "Scheduler dead letter queue ARN"
+  value       = aws_sqs_queue.scheduler_dlq.arn
+}

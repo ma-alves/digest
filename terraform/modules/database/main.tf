@@ -88,6 +88,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "template" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "template" {
+  bucket = aws_s3_bucket.template.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 resource "aws_s3_bucket" "html" {
   bucket        = "${var.name_prefix}-rendered-html"
   force_destroy = true
@@ -114,4 +123,13 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "html" {
       sse_algorithm = "AES256"
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "html" {
+  bucket = aws_s3_bucket.html.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }

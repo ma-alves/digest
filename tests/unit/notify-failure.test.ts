@@ -1,6 +1,6 @@
 import { mockClient } from 'aws-sdk-client-mock'
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns'
-import { handler } from './index'
+import { handler } from '../../handlers/notify-failure'
 
 const snsMock = mockClient(SNSClient)
 
