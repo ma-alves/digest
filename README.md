@@ -95,9 +95,6 @@ O pipeline de CI roda em pull requests para `main` (e pushes para `dev`): `npm c
 
 ```bash
 git clone https://github.com/ma-alves/digest.git
-cp .env.example .env
-# edite .env com suas credenciais (NEWSAPI_KEY, AWS keys)
-
 bash scripts/bootstrap-state.sh  # apenas na primeira vez
 npm ci
 npm run build:handlers
