@@ -37,7 +37,27 @@ jobs:
       - run: npm test
         working-directory: ./
 
-      - run: terraform init
+      - name: Ensure S3 backend bucket exists
+        env:
+          AWS_REGION: ${{ env.AWS_REGION }}
+          TF_STATE_BUCKET: ${{ secrets.TF_STATE_BUCKET }}
+        run: |
+          set -e
+          if aws s3api head-bucket --bucket "$TF_STATE_BUCKET" 2>/dev/null; then
+            echo "Bucket $TF_STATE_BUCKET already exists"
+          else
+            echo "Creating bucket $TF_STATE_BUCKET in $AWS_REGION"
+            if [ "$AWS_REGION" = "us-east-1" ]; then
+              aws s3api create-bucket --bucket "$TF_STATE_BUCKET"
+            else
+              aws s3api create-bucket --bucket "$TF_STATE_BUCKET" --create-bucket-configuration LocationConstraint="$AWS_REGION"
+            fi
+            aws s3api put-public-access-block --bucket "$TF_STATE_BUCKET" --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+            aws s3api put-bucket-versioning --bucket "$TF_STATE_BUCKET" --versioning-configuration Status=Enabled
+            echo "Bucket $TF_STATE_BUCKET created and configured"
+          fi
+
+      - run: terraform init -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}"
       - run: terraform validate
       - run: terraform plan -out=tfplan
 
