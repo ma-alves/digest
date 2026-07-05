@@ -113,3 +113,9 @@ npm run tf:apply
 | `npm run tf:plan` | Terraform plan |
 | `npm run tf:apply` | Terraform apply |
 | `npm run seed` | Popula assinantes de exemplo no DynamoDB |
+
+## Contato
+
+- GitHub: [ma-alves](https://github.com/ma-alves)
+- Email: matheusvialves@proton.me
+- LinkedIn: [Matheus Alves](https://linkedin.com/in/matheusvialves/)
