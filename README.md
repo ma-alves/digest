@@ -118,4 +118,3 @@ npm run tf:apply
 
 - GitHub: [ma-alves](https://github.com/ma-alves)
 - Email: matheusvialves@proton.me
-- LinkedIn: [Matheus Alves](https://linkedin.com/in/matheusvialves/)
